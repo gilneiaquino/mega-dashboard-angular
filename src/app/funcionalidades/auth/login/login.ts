@@ -1,19 +1,19 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import {Auth} from '../../../core/auth';
+import { Auth } from '../../../core/auth';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './login.html',
-  styleUrls: ['./login.scss']
+  styleUrl: './login.scss'
 })
 export class Login {
   private fb = inject(FormBuilder);
-  private authService = inject(Auth);
+  private auth = inject(Auth);
   private router = inject(Router);
 
   loading = false;
@@ -21,7 +21,8 @@ export class Login {
 
   form = this.fb.group({
     username: ['', [Validators.required]],
-    password: ['', [Validators.required]]
+    password: ['', [Validators.required]],
+    tenant: ['default', [Validators.required]] // pode vir de um select
   });
 
   submit(): void {
@@ -33,20 +34,22 @@ export class Login {
     this.loading = true;
     this.errorMessage = '';
 
-    const { username, password } = this.form.value;
+    const { username, password, tenant } = this.form.value;
 
-    this.authService.login({ username: username!, password: password! })
-      .subscribe({
-        next: () => {
-          this.loading = false;
-          // depois você muda para /dashboard
-          this.router.navigate(['/dashboard']);
-        },
-        error: (err) => {
-          this.loading = false;
-          this.errorMessage =
-            err?.error?.message || 'Usuário ou senha inválidos.';
-        }
-      });
+    this.auth.login({
+      username: username!,
+      password: password!,
+      tenant: tenant!
+    }).subscribe({
+      next: () => {
+        this.loading = false;
+        this.router.navigate(['/dashboard']);
+      },
+      error: err => {
+        this.loading = false;
+        this.errorMessage =
+          err?.error?.message || 'Usuário, senha ou tenant inválidos.';
+      }
+    });
   }
 }
