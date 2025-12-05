@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface LoginRequest {
   username: string;
@@ -24,6 +25,7 @@ export interface LoginResponse {
 @Injectable({ providedIn: 'root' })
 export class Auth {
   private http = inject(HttpClient);
+  private apiUrl = environment.apiUrl; // em dev = ''
 
   private tokenKey = 'auth_token';
   private userKey = 'auth_user';
@@ -35,7 +37,7 @@ export class Auth {
     });
 
     return this.http.post<LoginResponse>(
-      '/auth/login',
+      `${this.apiUrl}/auth/login`,       // 🔴 TEM que ser /auth/login
       {
         login: body.username,
         senha: body.password

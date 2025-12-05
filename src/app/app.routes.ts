@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { Login } from './funcionalidades/auth/login/login';
+import { Login } from './features/auth/login/login';
 import { inject } from '@angular/core';
 import { Auth } from './core/auth';
 
@@ -14,7 +14,7 @@ export const routes: Routes = [
     path: 'dashboard',
     canActivate: [canActivateAuth],
     loadComponent: () =>
-      import('./funcionalidades/dashboard/dashboard').then(m => m.Dashboard)
+      import('./features/dashboard/dashboard').then(m => m.Dashboard)
   },
   { path: '', pathMatch: 'full', redirectTo: 'login' },
   { path: '**', redirectTo: 'login' }

@@ -1,50 +1,46 @@
 {
-  "name": "mega-dashboard",
+  "name": "mega-dashboard-angular",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "build-proxy": "tsc proxy.conf.ts --module commonjs --target es2019",
-    "start": "npm run build-proxy && ng serve",
+    "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:mega-dashboard": "node dist/mega-dashboard/server/server.mjs"
-  },
-  "prettier": {
-    "printWidth": 100,
-    "singleQuote": true,
-    "overrides": [
-      {
-        "files": "*.html",
-        "options": {
-          "parser": "angular"
-        }
-      }
-    ]
+    "serve:ssr:mega-dashboard-angular": "node dist/mega-dashboard-angular/server/server.mjs"
   },
   "private": true,
-  "packageManager": "npm@10.8.2",
   "dependencies": {
-    "@angular/common": "^21.0.0",
-    "@angular/compiler": "^21.0.0",
-    "@angular/core": "^21.0.0",
-    "@angular/forms": "^21.0.0",
-    "@angular/platform-browser": "^21.0.0",
-    "@angular/platform-server": "^21.0.0",
-    "@angular/router": "^21.0.0",
-    "@angular/ssr": "^21.0.2",
-    "express": "^5.1.0",
+    "@angular/animations": "^18.2.0",
+    "@angular/common": "^18.2.0",
+    "@angular/compiler": "^18.2.0",
+    "@angular/core": "^18.2.0",
+    "@angular/forms": "^18.2.0",
+    "@angular/platform-browser": "^18.2.0",
+    "@angular/platform-browser-dynamic": "^18.2.0",
+    "@angular/platform-server": "^18.2.0",
+    "@angular/router": "^18.2.0",
+    "@angular/ssr": "^18.2.21",
+    "@swimlane/ngx-charts": "^23.1.0",
+    "d3": "^7.9.0",
+    "express": "^4.18.2",
     "rxjs": "~7.8.0",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "zone.js": "~0.14.10"
   },
   "devDependencies": {
-    "@angular/build": "^21.0.2",
-    "@angular/cli": "^21.0.2",
-    "@angular/compiler-cli": "^21.0.0",
-    "@types/express": "^5.0.1",
-    "@types/node": "^20.17.19",
-    "jsdom": "^27.1.0",
-    "typescript": "~5.9.2",
-    "vitest": "^4.0.8"
+    "@angular-devkit/build-angular": "^18.2.21",
+    "@angular/cli": "^18.2.21",
+    "@angular/compiler-cli": "^18.2.0",
+    "@types/express": "^4.17.17",
+    "@types/jasmine": "~5.1.0",
+    "@types/node": "^18.18.0",
+    "jasmine-core": "~5.2.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.1.0",
+    "typescript": "~5.5.2"
   }
 }
