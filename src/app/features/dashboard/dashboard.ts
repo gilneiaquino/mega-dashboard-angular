@@ -1,23 +1,59 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Auth, UsuarioLogado } from '../../core/auth';
-import { Router } from '@angular/router';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NgxChartsModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })
 export class Dashboard {
-  private auth = inject(Auth);
-  private router = inject(Router);
 
-  usuario: UsuarioLogado | null = this.auth.getUsuario();
+  // tamanho dos gráficos (pode ajustar depois)
+  view: [number, number] = [500, 300];
 
-  logout(): void {
-    this.auth.logout();
-    this.router.navigate(['/login']);
-  }
+  // gráfico 1 – carteira física (exemplo)
+  graficoFisico = [
+    { name: 'Adimplente', value: 120 },
+    { name: 'Inadimplente', value: 30 }
+  ];
+
+  // gráfico 2 – carteira financeira (exemplo)
+  graficoFinanceiro = [
+    { name: 'Adimplente', value: 150000 },
+    { name: 'Inadimplente', value: 25000 }
+  ];
+
+  // gráfico 3 – evolução (exemplo)
+  graficoEvolucao = [
+    {
+      name: 'Contratos',
+      series: [
+        { name: 'Jan', value: 10 },
+        { name: 'Fev', value: 15 },
+        { name: 'Mar', value: 20 }
+      ]
+    },
+    {
+      name: 'Valor (R$ mil)',
+      series: [
+        { name: 'Jan', value: 80 },
+        { name: 'Fev', value: 120 },
+        { name: 'Mar', value: 160 }
+      ]
+    }
+  ];
+
+  legend = true;
+  showLabels = true;
+  animations = true;
+  xAxis = true;
+  yAxis = true;
+  showXAxisLabel = true;
+  showYAxisLabel = true;
+
+  xAxisLabel = 'Mês';
+  yAxisLabel = 'Quantidade';
 }
