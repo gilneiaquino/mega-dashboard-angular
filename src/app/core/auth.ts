@@ -30,17 +30,16 @@ export class Auth {
       'X-Tenant-ID': body.tenant
     });
 
-    return this.http
-      .post<LoginResponse>(`${this.apiUrl}/auth/login`, body, { headers })
-      .pipe(
-        tap(res => {
-          if (res.token) {
-            localStorage.setItem(this.tokenKey, res.token);
-          }
-          localStorage.setItem(this.tenantKey, body.tenant);
-        })
-      );
+    return this.http.post<LoginResponse>(
+      '/auth/login',   // usando proxy
+      {
+        login: body.username,
+        senha: body.password
+      },
+      { headers }
+    );
   }
+
 
   logout(): void {
     localStorage.removeItem(this.tokenKey);
