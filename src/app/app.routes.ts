@@ -10,14 +10,12 @@ const canActivateAuth = () => {
 
 export const routes: Routes = [
   { path: 'login', component: Login },
-
   {
     path: 'dashboard',
     canActivate: [canActivateAuth],
     loadComponent: () =>
       import('./funcionalidades/dashboard/dashboard').then(m => m.Dashboard)
   },
-
   { path: '', pathMatch: 'full', redirectTo: 'login' },
   { path: '**', redirectTo: 'login' }
 ];

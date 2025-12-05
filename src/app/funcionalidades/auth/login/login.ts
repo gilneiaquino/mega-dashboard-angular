@@ -20,9 +20,9 @@ export class Login {
   errorMessage = '';
 
   form = this.fb.group({
-    username: ['', [Validators.required]],
-    password: ['', [Validators.required]],
-    tenant: ['default', [Validators.required]] // pode vir de um select
+    username: ['', Validators.required],
+    password: ['', Validators.required],
+    tenant: ['empresa-x', Validators.required] // por enquanto fixo ou options
   });
 
   submit(): void {
@@ -48,7 +48,7 @@ export class Login {
       error: err => {
         this.loading = false;
         this.errorMessage =
-          err?.error?.message || 'Usuário, senha ou tenant inválidos.';
+          err?.error?.message || 'Usuário, senha ou empresa inválidos.';
       }
     });
   }

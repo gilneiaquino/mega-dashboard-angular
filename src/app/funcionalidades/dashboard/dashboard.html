@@ -1,1 +1,24 @@
-<p>dashboard works!</p>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="logo">Mega Dashboard</div>
+
+    <div class="user-info" *ngIf="usuario">
+      <div class="nome">{{ usuario.nome }}</div>
+      <div class="tenant">{{ usuario.tenant }}</div>
+      <div class="perfil">{{ usuario.perfil }}</div>
+    </div>
+
+    <nav class="menu">
+      <a class="menu-item active">Dashboard</a>
+      <a class="menu-item">Relatórios</a>
+      <a class="menu-item">Configurações</a>
+    </nav>
+
+    <button class="logout" (click)="logout()">Sair</button>
+  </aside>
+
+  <main class="content">
+    <h2>Visão geral</h2>
+    <p>Aqui vão entrar os cards e gráficos da Sprint 2 pra frente 🚀</p>
+  </main>
+</div>

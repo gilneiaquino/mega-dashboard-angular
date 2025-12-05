@@ -1,28 +1,32 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
-import {environment} from '../environments/environment';
 
 export interface LoginRequest {
   username: string;
   password: string;
-  tenant: string; // vindo do formulário de login
+  tenant: string;
+}
+
+export interface UsuarioLogado {
+  id: number;
+  nome: string;
+  login: string;
+  perfil: string;
+  tenant: string;
 }
 
 export interface LoginResponse {
-  token: string;   // ajusta pro que o backend devolver
-  nome?: string;
-  perfil?: string;
+  token: string;
+  usuario: UsuarioLogado;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class Auth {
   private http = inject(HttpClient);
-  private apiUrl = environment.apiUrl ?? 'http://localhost:8080';
 
   private tokenKey = 'auth_token';
+  private userKey = 'auth_user';
   private tenantKey = 'tenant';
 
   login(body: LoginRequest): Observable<LoginResponse> {
@@ -31,18 +35,24 @@ export class Auth {
     });
 
     return this.http.post<LoginResponse>(
-      '/auth/login',   // usando proxy
+      '/auth/login',
       {
         login: body.username,
         senha: body.password
       },
       { headers }
+    ).pipe(
+      tap(res => {
+        localStorage.setItem(this.tokenKey, res.token);
+        localStorage.setItem(this.userKey, JSON.stringify(res.usuario));
+        localStorage.setItem(this.tenantKey, res.usuario.tenant);
+      })
     );
   }
 
-
   logout(): void {
     localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem(this.userKey);
     localStorage.removeItem(this.tenantKey);
   }
 
@@ -50,8 +60,9 @@ export class Auth {
     return localStorage.getItem(this.tokenKey);
   }
 
-  getTenant(): string | null {
-    return localStorage.getItem(this.tenantKey);
+  getUsuario(): UsuarioLogado | null {
+    const raw = localStorage.getItem(this.userKey);
+    return raw ? JSON.parse(raw) as UsuarioLogado : null;
   }
 
   isLoggedIn(): boolean {

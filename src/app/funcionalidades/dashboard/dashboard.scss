@@ -1,0 +1,66 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background: #020617;
+  color: #e5e7eb;
+}
+
+.sidebar {
+  width: 260px;
+  background: #020617;
+  border-right: 1px solid #111827;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.user-info {
+  font-size: 0.9rem;
+  margin-bottom: 24px;
+
+  .nome {
+    font-weight: 600;
+  }
+  .tenant {
+    color: #a5b4fc;
+  }
+  .perfil {
+    font-size: 0.75rem;
+    opacity: 0.8;
+  }
+}
+
+.menu {
+  flex: 1;
+}
+
+.menu-item {
+  display: block;
+  padding: 8px 0;
+  font-size: 0.9rem;
+  cursor: pointer;
+  opacity: 0.9;
+}
+
+.menu-item.active {
+  color: #22c55e;
+}
+
+.logout {
+  border: none;
+  background: #ef4444;
+  color: #f9fafb;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.content {
+  flex: 1;
+  padding: 24px;
+}

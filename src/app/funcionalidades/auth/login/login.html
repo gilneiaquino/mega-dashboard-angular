@@ -4,22 +4,21 @@
 
     <form [formGroup]="form" (ngSubmit)="submit()">
       <div class="form-field">
-        <label for="tenant">Empresa</label>
-        <select id="tenant" formControlName="tenant">
+        <label>Empresa</label>
+        <select formControlName="tenant">
           <option value="empresa-x">Empresa X</option>
           <option value="empresa-y">Empresa Y</option>
-          <!-- depois você carrega isso da API -->
         </select>
       </div>
 
       <div class="form-field">
-        <label for="username">Usuário</label>
-        <input id="username" type="text" formControlName="username" />
+        <label>Usuário</label>
+        <input type="text" formControlName="username" />
       </div>
 
       <div class="form-field">
-        <label for="password">Senha</label>
-        <input id="password" type="password" formControlName="password" />
+        <label>Senha</label>
+        <input type="password" formControlName="password" />
       </div>
 
       <button type="submit" [disabled]="loading || form.invalid">
