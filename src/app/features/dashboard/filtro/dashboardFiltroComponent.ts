@@ -1,14 +1,14 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
-import {DashboardFiltro} from '../../../core/model/dashboard-filtro';
+import {DashboardFiltro} from '../model/dashboard-filtro';
 
 @Component({
   selector: 'app-dashboard-filtro',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './DashboardFiltroComponent.html',
-  styleUrl: './DashboardFiltroComponent.scss'
+  templateUrl: './dashboardFiltroComponent.html',
+  styleUrl: './dashboardFiltroComponent.scss'
 })
 export class DashboardFiltroComponent implements OnInit {
 

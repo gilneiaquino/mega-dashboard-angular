@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
-import { DashboardFiltroComponent as DashboardFiltroComponent } from './filtro/DashboardFiltroComponent';
- import { DashboardService } from '../../core/services/dashboard.service';
-import {DashboardResponse} from '../../core/model/dashboard-response';
-import {DashboardFiltro} from '../../core/model/dashboard-filtro';
+import { DashboardFiltroComponent as DashboardFiltroComponent } from './filtro/dashboardFiltroComponent';
+ import { DashboardService } from './service/dashboard.service';
+import {DashboardResponse} from './model/dashboard-response';
+import {DashboardFiltro} from './model/dashboard-filtro';
 import { DashboardCardComponent } from './shared/dashboard-card.component';
 
 @Component({

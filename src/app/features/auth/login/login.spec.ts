@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { PLATFORM_ID } from '@angular/core';
 
-import { Login } from './login';
+import { Login } from './login';        // ajuste se o nome/arquivo for diferente
+import { Auth } from '../../../core/auth';
 
 describe('Login', () => {
   let component: Login;
@@ -8,13 +11,19 @@ describe('Login', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Login]
-    })
-    .compileComponents();
+      imports: [
+        Login,
+        HttpClientTestingModule     // <-- daqui é que vem o HttpClient “fake”
+      ],
+      providers: [
+        Auth,
+        { provide: PLATFORM_ID, useValue: 'browser' }
+      ]
+    }).compileComponents();
 
     fixture = TestBed.createComponent(Login);
     component = fixture.componentInstance;
-    await fixture.whenStable();
+    fixture.detectChanges();
   });
 
   it('should create', () => {
