@@ -1,4 +1,5 @@
 <div class="dashboard-container">
+
   <!-- Filtro -->
   <section class="filtro-section">
     <app-dashboard-filtro
@@ -7,27 +8,26 @@
     </app-dashboard-filtro>
   </section>
 
-  <!-- Estado de carregamento -->
+  <!-- Estados globais -->
   <div *ngIf="loading" class="estado-info">
-    Carregando dados...
+    Carregando dados do dashboard...
   </div>
 
-  <!-- Mensagem de erro -->
   <div *ngIf="!loading && erro" class="estado-info erro">
     {{ erro }}
   </div>
 
-  <!-- Conteúdo principal do dashboard -->
+  <!-- Conteúdo dos gráficos -->
   <section *ngIf="!loading && !erro" class="graficos-grid">
 
-    <!-- Gráfico 1: Carteira -->
+    <!-- Gráfico 1: Carteira Física -->
     <div class="grafico-card">
-      <h3>Carteira por situação</h3>
+      <h3>Carteira Física</h3>
 
       <ngx-charts-pie-chart
-        *ngIf="dadosCarteira?.length"
+        *ngIf="dadosCarteiraFisica?.length"
         [view]="view"
-        [results]="dadosCarteira"
+        [results]="dadosCarteiraFisica"
         [legend]="true"
         [labels]="true"
         [doughnut]="false"
@@ -35,29 +35,49 @@
         [gradient]="false">
       </ngx-charts-pie-chart>
 
-      <p *ngIf="!dadosCarteira?.length" class="sem-dados">
+      <p *ngIf="!dadosCarteiraFisica?.length" class="sem-dados">
         Nenhum dado para exibir.
       </p>
     </div>
 
-    <!-- Gráfico 2: Operações por etapa -->
+    <!-- Gráfico 2: Carteira Financeira -->
     <div class="grafico-card">
-      <h3>Operações por etapa</h3>
+      <h3>Carteira Financeira</h3>
 
-      <ngx-charts-bar-vertical
-        *ngIf="dadosOperacoes?.length"
+      <ngx-charts-pie-chart
+        *ngIf="dadosCarteiraFinanceira?.length"
         [view]="view"
-        [results]="dadosOperacoes"
+        [results]="dadosCarteiraFinanceira"
+        [legend]="true"
+        [labels]="true"
+        [doughnut]="false"
+        [explodeSlices]="false"
+        [gradient]="false">
+      </ngx-charts-pie-chart>
+
+      <p *ngIf="!dadosCarteiraFinanceira?.length" class="sem-dados">
+        Nenhum dado para exibir.
+      </p>
+    </div>
+
+    <!-- Gráfico 3: Evolução (barras com série) -->
+    <div class="grafico-card grafico-full">
+      <h3>Evolução</h3>
+
+      <ngx-charts-bar-vertical-2d
+        *ngIf="dadosEvolucao?.length"
+        [view]="[view[0] * 2, view[1]]"
+        [results]="dadosEvolucao"
         [xAxis]="true"
         [yAxis]="true"
-        [legend]="false"
+        [legend]="true"
         [showXAxisLabel]="true"
         [showYAxisLabel]="true"
-        [xAxisLabel]="'Etapa'"
-        [yAxisLabel]="'Qtde.'">
-      </ngx-charts-bar-vertical>
+        [xAxisLabel]="'Período'"
+        [yAxisLabel]="'Valor'">
+      </ngx-charts-bar-vertical-2d>
 
-      <p *ngIf="!dadosOperacoes?.length" class="sem-dados">
+      <p *ngIf="!dadosEvolucao?.length" class="sem-dados">
         Nenhum dado para exibir.
       </p>
     </div>

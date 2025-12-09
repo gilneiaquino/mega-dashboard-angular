@@ -28,7 +28,7 @@ export class DashboardFiltroComponent implements OnInit {
     });
   }
 
-  onSubmit(): void {
+  onPesquisar(): void {
     const filtro: DashboardFiltro = this.form.getRawValue();
     this.pesquisar.emit(filtro);
   }

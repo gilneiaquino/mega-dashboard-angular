@@ -1,34 +1,40 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="filtro-container">
+<div class="filtro-card">
+  <form [formGroup]="form" (ngSubmit)="onPesquisar()" class="filtro-form">
 
-  <div class="filtro-row">
-    <div class="field">
-      <label>Data início</label>
-      <input type="date" formControlName="dataInicio">
+    <div class="campo">
+      <label for="dataInicio">Data início</label>
+      <input id="dataInicio" type="date" formControlName="dataInicio" />
     </div>
 
-    <div class="field">
-      <label>Data fim</label>
-      <input type="date" formControlName="dataFim">
+    <div class="campo">
+      <label for="dataFim">Data fim</label>
+      <input id="dataFim" type="date" formControlName="dataFim" />
     </div>
 
-    <div class="field">
-      <label>Categoria</label>
-      <input type="text" formControlName="categoria" placeholder="ex: Financeiro, Vendas...">
+    <div class="campo campo-longo">
+      <label for="categoria">Categoria</label>
+      <input
+        id="categoria"
+        type="text"
+        placeholder="ex: Financeiro, Vendas..."
+        formControlName="categoria"
+      />
     </div>
 
-    <div class="field">
-      <label>Status</label>
-      <select formControlName="status">
+    <div class="campo">
+      <label for="status">Status</label>
+      <select id="status" formControlName="status">
         <option value="TODOS">Todos</option>
         <option value="ATIVO">Ativo</option>
         <option value="INATIVO">Inativo</option>
       </select>
     </div>
-  </div>
 
-  <div class="filtro-actions">
-    <button type="submit">Pesquisar</button>
-    <button type="button" class="secundario" (click)="limpar()">Limpar</button>
-  </div>
-
-</form>
+    <div class="acoes">
+      <button type="submit">Pesquisar</button>
+      <button type="button" (click)="form.reset({ status: 'TODOS' })">
+        Limpar
+      </button>
+    </div>
+  </form>
+</div>

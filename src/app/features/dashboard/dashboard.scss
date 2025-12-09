@@ -1,66 +1,55 @@
-.layout {
-  display: flex;
-  min-height: 100vh;
-  background: #020617;
-  color: #e5e7eb;
+.dashboard-container {
+  padding: 16px;
 }
 
-.sidebar {
-  width: 260px;
-  background: #020617;
-  border-right: 1px solid #111827;
-  padding: 24px 16px;
-  display: flex;
-  flex-direction: column;
+.filtro-section {
+  margin-bottom: 16px;
 }
 
-.logo {
-  font-weight: 700;
-  margin-bottom: 24px;
+.estado-info {
+  margin: 8px 0 16px;
+  font-size: 14px;
 }
 
-.user-info {
-  font-size: 0.9rem;
-  margin-bottom: 24px;
+.estado-info.erro {
+  color: #b00020;
+}
 
-  .nome {
+.graficos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 16px;
+}
+
+.grafico-card {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+
+  h3 {
+    margin-bottom: 12px;
+    font-size: 16px;
     font-weight: 600;
+    color: #444;
   }
-  .tenant {
-    color: #a5b4fc;
+
+  .sem-dados {
+    font-size: 13px;
+    color: #777;
+    text-align: center;
+    padding: 24px 0;
   }
-  .perfil {
-    font-size: 0.75rem;
-    opacity: 0.8;
-  }
 }
 
-.menu {
-  flex: 1;
+/* opcional: deixar o de evolução ocupando mais espaço */
+.grafico-full {
+  grid-column: 1 / -1;
+}
+.dashboard-container {
+  padding: 16px 24px;
 }
 
-.menu-item {
-  display: block;
-  padding: 8px 0;
-  font-size: 0.9rem;
-  cursor: pointer;
-  opacity: 0.9;
-}
-
-.menu-item.active {
-  color: #22c55e;
-}
-
-.logout {
-  border: none;
-  background: #ef4444;
-  color: #f9fafb;
-  padding: 8px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.content {
-  flex: 1;
-  padding: 24px;
+.filtro-section {
+  margin-bottom: 20px;
 }
