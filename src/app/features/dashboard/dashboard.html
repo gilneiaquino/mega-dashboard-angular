@@ -8,11 +8,13 @@
     </app-dashboard-filtro>
   </section>
 
-  <!-- Estados globais -->
-  <div *ngIf="loading" class="estado-info">
-    Carregando dados do dashboard...
+  <!-- Overlay de loading -->
+  <div class="overlay" *ngIf="loading">
+    <div class="spinner"></div>
+    <span>Carregando dados do dashboard...</span>
   </div>
 
+  <!-- Mensagem de erro -->
   <div *ngIf="!loading && erro" class="estado-info erro">
     {{ erro }}
   </div>
@@ -20,12 +22,12 @@
   <!-- Conteúdo dos gráficos -->
   <section *ngIf="!loading && !erro" class="graficos-grid">
 
-    <!-- Gráfico 1: Carteira Física -->
-    <div class="grafico-card">
-      <h3>Carteira Física</h3>
+    <!-- Carteira Física -->
+    <app-dashboard-card
+      [titulo]="'Carteira Física'"
+      [hasData]="dadosCarteiraFisica.length > 0">
 
       <ngx-charts-pie-chart
-        *ngIf="dadosCarteiraFisica?.length"
         [view]="view"
         [results]="dadosCarteiraFisica"
         [legend]="true"
@@ -35,17 +37,14 @@
         [gradient]="false">
       </ngx-charts-pie-chart>
 
-      <p *ngIf="!dadosCarteiraFisica?.length" class="sem-dados">
-        Nenhum dado para exibir.
-      </p>
-    </div>
+    </app-dashboard-card>
 
-    <!-- Gráfico 2: Carteira Financeira -->
-    <div class="grafico-card">
-      <h3>Carteira Financeira</h3>
+    <!-- Carteira Financeira -->
+    <app-dashboard-card
+      [titulo]="'Carteira Financeira'"
+      [hasData]="dadosCarteiraFinanceira.length > 0">
 
       <ngx-charts-pie-chart
-        *ngIf="dadosCarteiraFinanceira?.length"
         [view]="view"
         [results]="dadosCarteiraFinanceira"
         [legend]="true"
@@ -55,17 +54,15 @@
         [gradient]="false">
       </ngx-charts-pie-chart>
 
-      <p *ngIf="!dadosCarteiraFinanceira?.length" class="sem-dados">
-        Nenhum dado para exibir.
-      </p>
-    </div>
+    </app-dashboard-card>
 
-    <!-- Gráfico 3: Evolução (barras com série) -->
-    <div class="grafico-card grafico-full">
-      <h3>Evolução</h3>
+    <!-- Evolução -->
+    <app-dashboard-card
+      class="grafico-full"
+      [titulo]="'Evolução'"
+      [hasData]="dadosEvolucao.length > 0">
 
       <ngx-charts-bar-vertical-2d
-        *ngIf="dadosEvolucao?.length"
         [view]="[view[0] * 2, view[1]]"
         [results]="dadosEvolucao"
         [xAxis]="true"
@@ -77,10 +74,7 @@
         [yAxisLabel]="'Valor'">
       </ngx-charts-bar-vertical-2d>
 
-      <p *ngIf="!dadosEvolucao?.length" class="sem-dados">
-        Nenhum dado para exibir.
-      </p>
-    </div>
+    </app-dashboard-card>
 
   </section>
 </div>

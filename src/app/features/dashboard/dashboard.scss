@@ -1,9 +1,10 @@
 .dashboard-container {
-  padding: 16px;
+  padding: 16px 24px;
+  position: relative; // importante pro overlay
 }
 
 .filtro-section {
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .estado-info {
@@ -21,35 +22,36 @@
   gap: 16px;
 }
 
-.grafico-card {
-  background: #ffffff;
-  border-radius: 8px;
-  padding: 16px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-
-  h3 {
-    margin-bottom: 12px;
-    font-size: 16px;
-    font-weight: 600;
-    color: #444;
-  }
-
-  .sem-dados {
-    font-size: 13px;
-    color: #777;
-    text-align: center;
-    padding: 24px 0;
-  }
-}
-
-/* opcional: deixar o de evolução ocupando mais espaço */
 .grafico-full {
   grid-column: 1 / -1;
 }
-.dashboard-container {
-  padding: 16px 24px;
+
+/* Overlay de loading */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.7);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #444;
 }
 
-.filtro-section {
-  margin-bottom: 20px;
+.spinner {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 3px solid #ddd;
+  border-top-color: #1976d2;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }

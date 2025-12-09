@@ -1,7 +1,8 @@
-import { Injectable, inject } from '@angular/core';
+import { Inject, inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { isPlatformBrowser } from '@angular/common';
 
 export interface LoginRequest {
   username: string;
@@ -25,11 +26,20 @@ export interface LoginResponse {
 @Injectable({ providedIn: 'root' })
 export class Auth {
   private http = inject(HttpClient);
-  private apiUrl = environment.apiUrl; // em dev = ''
+  private apiUrl = environment.apiUrl;
+
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
   private tokenKey = 'auth_token';
   private userKey = 'auth_user';
   private tenantKey = 'tenant';
+
+  // --- util SSR-safe ---
+  private hasLocalStorage(): boolean {
+    return isPlatformBrowser(this.platformId) && typeof localStorage !== 'undefined';
+  }
+
+  // --- login / logout ---
 
   login(body: LoginRequest): Observable<LoginResponse> {
     const headers = new HttpHeaders({
@@ -37,7 +47,7 @@ export class Auth {
     });
 
     return this.http.post<LoginResponse>(
-      `${this.apiUrl}/auth/login`,       // 🔴 TEM que ser /auth/login
+      `${this.apiUrl}/auth/login`,
       {
         login: body.username,
         senha: body.password
@@ -45,6 +55,9 @@ export class Auth {
       { headers }
     ).pipe(
       tap(res => {
+        if (!this.hasLocalStorage()) {
+          return;
+        }
         localStorage.setItem(this.tokenKey, res.token);
         localStorage.setItem(this.userKey, JSON.stringify(res.usuario));
         localStorage.setItem(this.tenantKey, res.usuario.tenant);
@@ -53,18 +66,35 @@ export class Auth {
   }
 
   logout(): void {
+    if (!this.hasLocalStorage()) {
+      return;
+    }
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem(this.userKey);
     localStorage.removeItem(this.tenantKey);
   }
 
+  // --- helpers ---
+
   getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
+    if (!this.hasLocalStorage()) {
+      return null;
+    }
+    return localStorage.getItem(this.tokenKey);  // 👈 agora usa tokenKey
   }
 
-  getUsuario(): UsuarioLogado | null {
-    const raw = localStorage.getItem(this.userKey);
-    return raw ? JSON.parse(raw) as UsuarioLogado : null;
+  setToken(token: string): void {
+    if (!this.hasLocalStorage()) {
+      return;
+    }
+    localStorage.setItem(this.tokenKey, token);
+  }
+
+  clearToken(): void {
+    if (!this.hasLocalStorage()) {
+      return;
+    }
+    localStorage.removeItem(this.tokenKey);
   }
 
   isLoggedIn(): boolean {

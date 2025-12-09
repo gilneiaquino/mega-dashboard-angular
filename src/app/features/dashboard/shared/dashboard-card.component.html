@@ -1,0 +1,13 @@
+<div class="dashboard-card">
+  <div class="dashboard-card__header">
+    <h3>{{ titulo }}</h3>
+  </div>
+
+  <div class="dashboard-card__content">
+    <ng-content *ngIf="hasData; else vazio"></ng-content>
+
+    <ng-template #vazio>
+      <p class="sem-dados">Nenhum dado para exibir.</p>
+    </ng-template>
+  </div>
+</div>

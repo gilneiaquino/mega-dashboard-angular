@@ -6,11 +6,12 @@ import { DashboardFiltroComponent as DashboardFiltroComponent } from './filtro/D
  import { DashboardService } from '../../core/services/dashboard.service';
 import {DashboardResponse} from '../../core/model/dashboard-response';
 import {DashboardFiltro} from '../../core/model/dashboard-filtro';
+import { DashboardCardComponent } from './shared/dashboard-card.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, NgxChartsModule, DashboardFiltroComponent],
+  imports: [CommonModule, NgxChartsModule, DashboardFiltroComponent, DashboardCardComponent],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss']
 })
