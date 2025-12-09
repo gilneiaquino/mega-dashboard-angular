@@ -21,6 +21,11 @@
   grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
   gap: 16px;
 }
+ngx-charts-pie-chart,
+ngx-charts-bar-vertical-2d {
+  display: block;
+  width: 100%;
+}
 
 .grafico-full {
   grid-column: 1 / -1;
