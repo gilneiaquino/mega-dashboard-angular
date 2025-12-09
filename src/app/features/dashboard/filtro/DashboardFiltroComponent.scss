@@ -1,0 +1,43 @@
+.dashboard-container {
+  padding: 16px;
+}
+
+.filtro-section {
+  margin-bottom: 16px;
+}
+
+.estado-info {
+  margin: 8px 0 16px;
+  font-size: 14px;
+}
+
+.estado-info.erro {
+  color: #b00020;
+}
+
+.graficos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 16px;
+}
+
+.grafico-card {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+
+  h3 {
+    margin-bottom: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #444;
+  }
+
+  .sem-dados {
+    font-size: 13px;
+    color: #777;
+    text-align: center;
+    padding: 24px 0;
+  }
+}

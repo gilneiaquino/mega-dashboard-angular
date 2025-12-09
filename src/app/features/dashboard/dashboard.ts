@@ -1,59 +1,94 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+
+import { DashboardFiltroComponent as DashboardFiltroComponent } from './filtro/DashboardFiltroComponent';
+ import { DashboardService } from '../../core/services/dashboard.service';
+import {DashboardResponse} from '../../core/model/dashboard-response';
+import {DashboardFiltro} from '../../core/model/dashboard-filtro';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, NgxChartsModule],
+  imports: [CommonModule, NgxChartsModule, DashboardFiltroComponent],
   templateUrl: './dashboard.html',
-  styleUrl: './dashboard.scss'
+  styleUrls: ['./dashboard.scss']
 })
-export class Dashboard {
+export class Dashboard implements OnInit {
 
-  // tamanho dos gráficos (pode ajustar depois)
-  view: [number, number] = [500, 300];
+  filtroAtual: DashboardFiltro | null = null;
 
-  // gráfico 1 – carteira física (exemplo)
-  graficoFisico = [
-    { name: 'Adimplente', value: 120 },
-    { name: 'Inadimplente', value: 30 }
-  ];
+  // estado de tela
+  loading = false;
+  erro: string | null = null;
 
-  // gráfico 2 – carteira financeira (exemplo)
-  graficoFinanceiro = [
-    { name: 'Adimplente', value: 150000 },
-    { name: 'Inadimplente', value: 25000 }
-  ];
+  // exemplo de dados para ngx-charts
+  view: [number, number] = [600, 300];
 
-  // gráfico 3 – evolução (exemplo)
-  graficoEvolucao = [
-    {
-      name: 'Contratos',
-      series: [
-        { name: 'Jan', value: 10 },
-        { name: 'Fev', value: 15 },
-        { name: 'Mar', value: 20 }
-      ]
-    },
-    {
-      name: 'Valor (R$ mil)',
-      series: [
-        { name: 'Jan', value: 80 },
-        { name: 'Fev', value: 120 },
-        { name: 'Mar', value: 160 }
-      ]
-    }
-  ];
+  // gráfico de pizza – situação da carteira
+  dadosCarteira: { name: string; value: number }[] = [];
 
-  legend = true;
-  showLabels = true;
-  animations = true;
-  xAxis = true;
-  yAxis = true;
-  showXAxisLabel = true;
-  showYAxisLabel = true;
+  // gráfico de barras – operações por estágio
+  dadosOperacoes: { name: string; value: number }[] = [];
+  // para os gráficos de pizza
+  dadosCarteiraFisica: { name: string; value: number }[] = [];
+  dadosCarteiraFinanceira: { name: string; value: number }[] = [];
 
-  xAxisLabel = 'Mês';
-  yAxisLabel = 'Quantidade';
+// para o gráfico de barras com séries
+  dadosEvolucao: { name: string; series: { name: string; value: number }[] }[] = [];
+
+
+  constructor(private dashboardService: DashboardService) {}
+
+  ngOnInit(): void {
+    // se quiser já carregar algo padrão, tipo filtro com data atual, setar aqui
+    // this.filtroAtual = { ... };
+    // if (this.filtroAtual) this.carregarDashboard(this.filtroAtual);
+  }
+
+  onPesquisar(filtro: DashboardFiltro | null): void {
+    this.filtroAtual = filtro;
+    this.carregarDashboard(filtro);
+  }
+
+  private carregarDashboard(filtro: DashboardFiltro | null): void {
+    this.loading = true;
+    this.erro = null;
+
+    this.dashboardService.consultar(filtro).subscribe({
+      next: (res: DashboardResponse) => {
+
+        // Pie – carteira física
+        this.dadosCarteiraFisica = (res.carteiraFisica || []).map(item => ({
+          name: item.label,
+          value: item.value
+        }));
+
+        // Pie – carteira financeira
+        this.dadosCarteiraFinanceira = (res.carteiraFinanceira || []).map(item => ({
+          name: item.label,
+          value: item.value
+        }));
+
+        // Bar – evolução (com séries)
+        this.dadosEvolucao = (res.evolucao || []).map(bar => ({
+          name: bar.label,
+          series: (bar.series || []).map(serie => ({
+            name: serie.label,
+            value: serie.value
+          }))
+        }));
+
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Erro ao carregar dashboard', err);
+        this.erro = 'Erro ao carregar dados do dashboard.';
+        this.dadosCarteiraFisica = [];
+        this.dadosCarteiraFinanceira = [];
+        this.dadosEvolucao = [];
+        this.loading = false;
+      }
+    });
+  }
 }
