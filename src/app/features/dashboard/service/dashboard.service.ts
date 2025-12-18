@@ -25,7 +25,7 @@ export interface BarItem {
 @Injectable({ providedIn: 'root' })
 export class DashboardService {
   private http = inject(HttpClient);
-  private baseUrl = `${environment.apiUrl}/api/dashboard`;
+  private baseUrl = `${environment.apiUrl}/api/dashboards`;
 
   consultar(filtro?: DashboardFiltro | null): Observable<DashboardResponse> {
     let params = new HttpParams();
