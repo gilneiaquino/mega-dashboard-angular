@@ -1,0 +1,62 @@
+<div class="login-container">
+  <div class="login-card">
+    <h1>Mega Dashboard</h1>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <!-- Empresa -->
+      <div class="form-field">
+        <label for="tenant">Empresa</label>
+        <select id="tenant" formControlName="tenant" [attr.aria-invalid]="form.controls.tenant.invalid && (form.controls.tenant.touched || form.controls.tenant.dirty)">
+          <option value="empresa-x">Empresa X</option>
+          <option value="empresa-y">Empresa Y</option>
+        </select>
+
+        <small class="field-error"
+               *ngIf="form.controls.tenant.invalid && (form.controls.tenant.touched || form.controls.tenant.dirty)">
+          Selecione a empresa.
+        </small>
+      </div>
+
+      <!-- Usuário -->
+      <div class="form-field">
+        <label for="username">Usuário</label>
+        <input
+          id="username"
+          type="text"
+          formControlName="username"
+          autocomplete="username"
+          [attr.aria-invalid]="form.controls.username.invalid && (form.controls.username.touched || form.controls.username.dirty)"
+        />
+
+        <small class="field-error"
+               *ngIf="form.controls.username.invalid && (form.controls.username.touched || form.controls.username.dirty)">
+          Informe o usuário.
+        </small>
+      </div>
+
+      <!-- Senha -->
+      <div class="form-field">
+        <label for="password">Senha</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          autocomplete="current-password"
+          [attr.aria-invalid]="form.controls.password.invalid && (form.controls.password.touched || form.controls.password.dirty)"
+        />
+
+        <small class="field-error"
+               *ngIf="form.controls.password.invalid && (form.controls.password.touched || form.controls.password.dirty)">
+          Informe a senha.
+        </small>
+      </div>
+
+      <button type="submit" [disabled]="loading || form.invalid">
+        {{ loading ? 'Entrando...' : 'Entrar' }}
+      </button>
+
+      <!-- erro geral (backend/login inválido) -->
+      <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+    </form>
+  </div>
+</div>

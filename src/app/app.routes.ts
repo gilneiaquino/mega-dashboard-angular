@@ -1,21 +1,54 @@
 import { Routes } from '@angular/router';
-import { Login } from './features/auth/login/login';
-import { inject } from '@angular/core';
-import { AuthService } from './core/services/auth.service';
-
-const canActivateAuth = () => {
-  const auth = inject(AuthService);
-  return auth.isLoggedIn();
-};
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
-  { path: 'login', component: Login },
+  // rota raiz → login
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'login'
+  },
+
+  // login público
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./features/auth/login/login.component')
+        .then(m => m.LoginComponent)
+  },
+
+  // dashboard protegido
   {
     path: 'dashboard',
-    canActivate: [canActivateAuth],
+    canActivate: [authGuard],
     loadComponent: () =>
-      import('./features/dashboard/dashboard').then(m => m.Dashboard)
+      import('./features/dashboard/dashboard.component')
+        .then(m => m.DashboardComponent)
   },
-  { path: '', pathMatch: 'full', redirectTo: 'login' },
-  { path: '**', redirectTo: 'login' }
+
+  // grupo protegido
+  {
+    path: '',
+    canActivateChild: [authGuard],
+    children: [
+      {
+        path: 'relatorios',
+        loadComponent: () =>
+          import('./features/relatorios/relatorios.component')
+            .then(m => m.RelatoriosComponent)
+      },
+      {
+        path: 'configuracoes',
+        loadComponent: () =>
+          import('./features/config/config.component')
+            .then(m => m.ConfigComponent)
+      }
+    ]
+  },
+
+  // fallback
+  {
+    path: '**',
+    redirectTo: 'login'
+  }
 ];

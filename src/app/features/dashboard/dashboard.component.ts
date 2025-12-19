@@ -12,10 +12,10 @@ import { DashboardCardComponent } from './shared/dashboard-card.component';
   selector: 'app-dashboard',
   standalone: true,
   imports: [CommonModule, NgxChartsModule, DashboardFiltroComponent, DashboardCardComponent],
-  templateUrl: './dashboard.html',
-  styleUrls: ['./dashboard.scss']
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.scss']
 })
-export class Dashboard implements OnInit {
+export class DashboardComponent implements OnInit {
 
   filtroAtual: DashboardFiltro | null = null;
 

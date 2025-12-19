@@ -20,6 +20,7 @@ h1 {
   margin-bottom: 24px;
   font-size: 1.4rem;
   text-align: center;
+  font-weight: 600;
 }
 
 .form-field {
@@ -29,34 +30,65 @@ h1 {
 
   label {
     margin-bottom: 4px;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    color: #cbd5f5;
   }
 
-  input {
-    padding: 8px 10px;
+  input,
+  select {
+    padding: 9px 10px;
     border-radius: 6px;
     border: 1px solid #374151;
     background: #020617;
     color: #e5e7eb;
+    font-size: 0.9rem;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
 
-  small {
+  input::placeholder {
+    color: #64748b;
+  }
+
+  input:focus,
+  select:focus {
+    outline: none;
+    border-color: #22c55e;
+    box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.5);
+  }
+
+  // estado inválido (quando Angular marca aria-invalid=true)
+  input[aria-invalid='true'],
+  select[aria-invalid='true'] {
+    border-color: #f97373;
+  }
+
+  small,
+  .field-error {
     margin-top: 4px;
     color: #f97373;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
 }
 
 button {
   width: 100%;
   padding: 10px;
-  margin-top: 4px;
+  margin-top: 6px;
   border-radius: 6px;
   border: none;
   font-weight: 600;
   cursor: pointer;
   background: #22c55e;
   color: #020617;
+  transition: background 0.15s ease, transform 0.05s ease;
+}
+
+button:hover:not([disabled]) {
+  background: #16a34a;
+}
+
+button:active:not([disabled]) {
+  transform: translateY(1px);
 }
 
 button[disabled] {
@@ -67,6 +99,6 @@ button[disabled] {
 .error {
   margin-top: 12px;
   color: #f97373;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   text-align: center;
 }

@@ -1,14 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 
-import { Dashboard } from './dashboard';
+import { DashboardComponent } from './dashboard.component';
 import { DashboardService } from './services/dashboard.service';
 import { DashboardResponse } from './model/dashboard-response';
 import { DashboardFiltro } from './model/dashboard-filtro';
 
-describe('Dashboard (component)', () => {
-  let component: Dashboard;
-  let fixture: ComponentFixture<Dashboard>;
+describe('DashboardComponent (component)', () => {
+  let component: DashboardComponent;
+  let fixture: ComponentFixture<DashboardComponent>;
   let dashboardServiceSpy: jasmine.SpyObj<DashboardService>;
 
   const mockResponse: DashboardResponse = {
@@ -35,13 +35,13 @@ describe('Dashboard (component)', () => {
     dashboardServiceSpy = jasmine.createSpyObj<DashboardService>('DashboardService', ['consultar']);
 
     await TestBed.configureTestingModule({
-      imports: [Dashboard], // standalone
+      imports: [DashboardComponent], // standalone
       providers: [
         { provide: DashboardService, useValue: dashboardServiceSpy } // 👈 mocka o services
       ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Dashboard);
+    fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
   });
 
