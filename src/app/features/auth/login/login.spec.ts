@@ -3,7 +3,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
 
 import { Login } from './login';        // ajuste se o nome/arquivo for diferente
-import { Auth } from '../../../core/auth';
+import { AuthService } from '../../../core/services/auth.service';
 
 describe('Login', () => {
   let component: Login;
@@ -16,7 +16,7 @@ describe('Login', () => {
         HttpClientTestingModule     // <-- daqui é que vem o HttpClient “fake”
       ],
       providers: [
-        Auth,
+        AuthService,
         { provide: PLATFORM_ID, useValue: 'browser' }
       ]
     }).compileComponents();

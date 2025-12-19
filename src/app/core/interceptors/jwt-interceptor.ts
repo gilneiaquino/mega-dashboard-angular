@@ -1,27 +1,31 @@
 import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { AuthService } from '../services/auth.service';
 
 export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
-  const token = localStorage.getItem('auth_token');
-  const tenant = localStorage.getItem('tenant');
+  const authService = inject(AuthService);
+
+  const token = authService.getToken();
+  const tenant = authService.getTenant();
 
   const isLogin = req.url.includes('/auth/login');
 
-  const headers: Record<string, string> = {};
+  let headers = req.headers;
 
-  // manda tenant sempre que existir (inclusive no login)
+  // sempre envia tenant, inclusive no login
   if (tenant) {
-    headers['X-Tenant-Id'] = tenant; // <-- use um nome só (veja observação abaixo)
+    headers = headers.set('X-Tenant-ID', tenant);
   }
 
-  // NÃO manda Authorization no login
+  // não envia Authorization no login
   if (!isLogin && token) {
-    headers['Authorization'] = `Bearer ${token}`;
+    headers = headers.set('Authorization', `Bearer ${token}`);
   }
 
-  // se não tem nada pra setar, passa direto
-  if (Object.keys(headers).length === 0) {
+  // se nada mudou, segue sem clone
+  if (headers === req.headers) {
     return next(req);
   }
 
-  return next(req.clone({ setHeaders: headers }));
+  return next(req.clone({ headers }));
 };

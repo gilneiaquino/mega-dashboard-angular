@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 import { DashboardFiltroComponent as DashboardFiltroComponent } from './filtro/dashboardFiltroComponent';
- import { DashboardService } from './service/dashboard.service';
+ import { DashboardService } from './services/dashboard.service';
 import {DashboardResponse} from './model/dashboard-response';
 import {DashboardFiltro} from './model/dashboard-filtro';
 import { DashboardCardComponent } from './shared/dashboard-card.component';
