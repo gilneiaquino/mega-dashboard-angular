@@ -7,11 +7,12 @@ import { DashboardFiltroComponent as DashboardFiltroComponent } from './filtro/d
 import {DashboardResponse} from './model/dashboard-response';
 import {DashboardFiltro} from './model/dashboard-filtro';
 import { DashboardCardComponent } from './shared/dashboard-card.component';
+import { AppHeaderComponent } from '../../shared/components/header/app-header.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, NgxChartsModule, DashboardFiltroComponent, DashboardCardComponent],
+  imports: [CommonModule,AppHeaderComponent, NgxChartsModule, DashboardFiltroComponent, DashboardCardComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
