@@ -1,13 +1,10 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { ShellComponent } from './features/shell/shell.component';
 
 export const routes: Routes = [
-  // rota raiz → login
-  {
-    path: '',
-    pathMatch: 'full',
-    redirectTo: 'login'
-  },
+  // raiz → login
+  { path: '', pathMatch: 'full', redirectTo: 'login' },
 
   // login público
   {
@@ -17,20 +14,18 @@ export const routes: Routes = [
         .then(m => m.LoginComponent)
   },
 
-  // dashboard protegido
-  {
-    path: 'dashboard',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/dashboard/dashboard.component')
-        .then(m => m.DashboardComponent)
-  },
-
-  // grupo protegido
+  // shell protegido
   {
     path: '',
+    component: ShellComponent,
     canActivateChild: [authGuard],
     children: [
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./features/dashboard/dashboard.component')
+            .then(m => m.DashboardComponent)
+      },
       {
         path: 'relatorios',
         loadComponent: () =>
@@ -47,8 +42,5 @@ export const routes: Routes = [
   },
 
   // fallback
-  {
-    path: '**',
-    redirectTo: 'login'
-  }
+  { path: '**', redirectTo: 'login' }
 ];
