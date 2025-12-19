@@ -1,0 +1,26 @@
+import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { catchError, throwError } from 'rxjs';
+import { AuthService } from '../services/auth.service';
+
+export const errorInterceptor: HttpInterceptorFn = (req, next) => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+
+  return next(req).pipe(
+    catchError((err: unknown) => {
+      if (err instanceof HttpErrorResponse) {
+        if (err.status === 401 || err.status === 403) {
+          auth.logout();
+
+          // evita loop se já estiver no login
+          if (!router.url.startsWith('/login')) {
+            router.navigate(['/login'], { queryParams: { returnUrl: router.url } });
+          }
+        }
+      }
+      return throwError(() => err);
+    })
+  );
+};
