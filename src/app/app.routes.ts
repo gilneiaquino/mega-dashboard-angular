@@ -1,11 +1,11 @@
-import { Routes } from '@angular/router';
-import { authGuard } from './core/guards/auth.guard';
-import { roleGuard } from './core/guards/role.guard';
-import { ShellComponent } from './features/shell/shell.component';
+import {Routes} from '@angular/router';
+import {authGuard} from './core/guards/auth.guard';
+import {roleGuard} from './core/guards/role.guard';
+import {ShellComponent} from './features/shell/shell.component';
 
 export const routes: Routes = [
   // raiz → login
-  { path: '', pathMatch: 'full', redirectTo: 'login' },
+  {path: '', pathMatch: 'full', redirectTo: 'login'},
 
   // login público
   {
@@ -35,6 +35,24 @@ export const routes: Routes = [
           import('./features/relatorios/pages/relatorios-list/relatorios-list.component')
             .then(m => m.RelatoriosListComponent)
       },
+      {
+        path: 'relatorios/novo',
+        loadComponent: () =>
+          import('./features/relatorios/pages/relatorio-form/relatorio-form.component')
+            .then(m => m.RelatorioFormComponent),
+      },
+      {
+        path: 'relatorios/:id/editar',
+        loadComponent: () =>
+          import('./features/relatorios/pages/relatorio-form/relatorio-form.component')
+            .then(m => m.RelatorioFormComponent),
+      },
+      {
+        path: 'relatorios/:id/executar',
+        loadComponent: () =>
+          import('./features/relatorios/pages/relatorio-executar/relatorio-executar.component')
+            .then(m => m.RelatorioExecutarComponent),
+      },
 
       {
         path: 'configuracoes',
@@ -54,5 +72,5 @@ export const routes: Routes = [
   },
 
   // fallback
-  { path: '**', redirectTo: 'login' }
+  {path: '**', redirectTo: 'login'}
 ];

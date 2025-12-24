@@ -1,0 +1,110 @@
+<section class="page">
+  <header class="page-header">
+    <div>
+      <h1>{{ id ? 'Editar relatório' : 'Novo relatório' }}</h1>
+      <p class="sub">Cadastre SQL parametrizado com bind variables (:param).</p>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn" (click)="cancelar()">Cancelar</button>
+      <button class="btn primary" (click)="salvar()" [disabled]="saving">
+        {{ saving ? 'Salvando...' : 'Salvar' }}
+      </button>
+    </div>
+  </header>
+
+  <div *ngIf="loading" class="state">Carregando...</div>
+  <div *ngIf="!loading && error" class="state error">{{ error }}</div>
+
+  <div *ngIf="!loading" class="grid">
+    <div class="card">
+      <div class="row">
+        <div class="field">
+          <label>Nome *</label>
+          <input type="text" formControlName="nome" [formGroup]="form" />
+          <small *ngIf="form.get('nome')?.touched && form.get('nome')?.invalid">Informe um nome válido.</small>
+        </div>
+
+        <div class="field">
+          <label>Tipo *</label>
+          <select formControlName="tipo" [formGroup]="form">
+            <option *ngFor="let t of tiposRelatorio" [value]="t">{{ t }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Descrição</label>
+        <input type="text" formControlName="descricao" [formGroup]="form" />
+      </div>
+
+      <div class="field">
+        <label>SQL *</label>
+        <textarea rows="10" formControlName="sqlTemplate" [formGroup]="form"
+                  placeholder="Ex: select * from operacao where data >= :dataInicial and agencia = :agencia">
+        </textarea>
+        <small class="muted">
+          Dica: use parâmetros no formato <code>:nome</code>. Ex.: <code>:dataInicial</code>
+        </small>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>Parâmetros</h2>
+        <button class="btn" (click)="adicionarParametro()">+ Adicionar</button>
+      </div>
+
+      <div class="params" formArrayName="parametros" [formGroup]="form">
+        <div class="param" *ngFor="let p of parametros.controls; let i = index" [formGroupName]="i">
+          <div class="row">
+            <div class="field">
+              <label>Nome *</label>
+              <input type="text" formControlName="nome" placeholder="ex: dataInicial" />
+              <small *ngIf="p.get('nome')?.touched && p.get('nome')?.invalid">
+                Use letras/números/_ (sem espaços).
+              </small>
+            </div>
+
+            <div class="field">
+              <label>Tipo *</label>
+              <select formControlName="tipo">
+                <option *ngFor="let tp of tiposParametro" [value]="tp">{{ tp }}</option>
+              </select>
+            </div>
+
+            <div class="field small">
+              <label>Obrigatório</label>
+              <input type="checkbox" formControlName="obrigatorio" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label>Valor padrão</label>
+              <input type="text" formControlName="defaultValue" placeholder="opcional" />
+            </div>
+
+            <div class="field">
+              <label>Opções (apenas LIST)</label>
+              <input type="text" formControlName="opcoes" placeholder="ex: A,B,C" />
+            </div>
+
+            <div class="field small right">
+              <label>&nbsp;</label>
+              <button class="btn danger" (click)="removerParametro(i)">Remover</button>
+            </div>
+          </div>
+
+          <div class="hint muted">
+            Lembrete: no SQL, referencie como <code>:{{ p.get('nome')?.value || 'param' }}</code>
+          </div>
+        </div>
+
+        <div *ngIf="parametros.length === 0" class="state">
+          Nenhum parâmetro cadastrado. Clique em “Adicionar”.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

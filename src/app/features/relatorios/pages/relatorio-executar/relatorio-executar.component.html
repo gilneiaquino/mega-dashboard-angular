@@ -1,0 +1,93 @@
+<section class="page">
+  <header class="page-header">
+    <div>
+      <h1>Executar relatório</h1>
+      <p class="sub" *ngIf="relatorio">{{ relatorio.nome }} · {{ relatorio.tipo }}</p>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn primary" (click)="executar()" [disabled]="running || loading">
+        {{ running ? 'Executando...' : 'Executar' }}
+      </button>
+      <button class="btn" (click)="exportarCsv()" [disabled]="!result || running">Exportar CSV</button>
+    </div>
+  </header>
+
+  <div *ngIf="loading" class="state">Carregando...</div>
+  <div *ngIf="!loading && error" class="state error">{{ error }}</div>
+
+  <div *ngIf="!loading && relatorio" class="grid">
+    <div class="card">
+      <h2>Filtros</h2>
+
+      <form [formGroup]="filtrosForm" class="filters">
+        <div class="field" *ngFor="let p of (relatorio.parametros || [])">
+          <label>{{ p.nome }} <span *ngIf="p.obrigatorio" class="req">*</span></label>
+
+          <!-- input simples (MVP). Depois a gente melhora por tipo -->
+          <input *ngIf="p.tipo !== 'BOOLEAN' && p.tipo !== 'LIST'"
+                 type="text" [formControlName]="p.nome"
+                 [placeholder]="p.tipo" />
+
+          <select *ngIf="p.tipo === 'LIST'" [formControlName]="p.nome">
+            <option [ngValue]="null">Selecione...</option>
+            <option *ngFor="let op of (p.opcoes || [])" [value]="op">{{ op }}</option>
+          </select>
+
+          <select *ngIf="p.tipo === 'BOOLEAN'" [formControlName]="p.nome">
+            <option [ngValue]="null">Selecione...</option>
+            <option [ngValue]="true">Sim</option>
+            <option [ngValue]="false">Não</option>
+          </select>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Resultado</h2>
+
+      <div *ngIf="!result && !running" class="state">
+        Execute o relatório para ver o resultado.
+      </div>
+
+      <div *ngIf="running" class="state">Executando...</div>
+
+      <div *ngIf="result && columns.length === 0" class="state">Sem colunas retornadas.</div>
+
+      <div class="table-wrap" *ngIf="result && columns.length > 0">
+        <table class="table">
+          <thead>
+          <tr>
+            <th *ngFor="let c of columns" class="sortable" (click)="ordenar(c)">{{ c }}</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let row of result.rows">
+            <td *ngFor="let c of columns">{{ row[c] }}</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <footer class="pager" *ngIf="result.page">
+          <span class="muted">
+            Página {{ (result.page.number ?? 0) + 1 }} · Total {{ result.page.totalElements }}
+          </span>
+
+          <div class="pager-actions">
+            <button class="btn" (click)="anterior()" [disabled]="page === 0 || running">Anterior</button>
+            <button class="btn" (click)="proximo()"
+                    [disabled]="running || ((page + 1) * size >= (result.page.totalElements ?? 0))">
+              Próximo
+            </button>
+
+            <select class="size" [value]="size" (change)="size = +($any($event.target).value); page = 0; executar(false)">
+              <option [value]="10">10</option>
+              <option [value]="20">20</option>
+              <option [value]="50">50</option>
+            </select>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </div>
+</section>

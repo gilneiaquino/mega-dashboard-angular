@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { PageResponse, Relatorio } from '../model/relatorio.model';
+import {ExecRequest, ExecResponse, PageResponse, Relatorio, RelatorioRequest} from '../model/relatorio.model';
 
 @Injectable({ providedIn: 'root' })
 export class RelatoriosService {
@@ -14,7 +14,7 @@ export class RelatoriosService {
     size?: number;
     q?: string;
     tipo?: 'TABELA' | 'KPI' | '';
-    sort?: string; // ex: 'nome,asc'
+    sort?: string;
   }): Observable<PageResponse<Relatorio>> {
     let httpParams = new HttpParams()
       .set('page', String(params.page ?? 0))
@@ -29,5 +29,18 @@ export class RelatoriosService {
 
   buscarPorId(id: number): Observable<Relatorio> {
     return this.http.get<Relatorio>(`${this.baseUrl}/${id}`);
+  }
+
+
+  criar(dto: RelatorioRequest): Observable<Relatorio> {
+    return this.http.post<Relatorio>(this.baseUrl, dto);
+  }
+
+  atualizar(id: number, dto: RelatorioRequest): Observable<Relatorio> {
+    return this.http.put<Relatorio>(`${this.baseUrl}/${id}`, dto);
+  }
+
+  executar(id: number, req: ExecRequest): Observable<ExecResponse> {
+    return this.http.post<ExecResponse>(`${this.baseUrl}/${id}/executar`, req);
   }
 }

@@ -1,0 +1,66 @@
+.page { padding: 1.5rem; color: #e5e7eb; }
+.page-header {
+  display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start;
+  h1 { margin: 0; font-size: 1.6rem; }
+  .sub { margin: .25rem 0 0; color: #9ca3af; }
+  .header-actions { display: flex; gap: .5rem; }
+}
+
+.grid { margin-top: 1rem; display: grid; grid-template-columns: 340px 1fr; gap: 1rem; }
+.card {
+  background: rgba(0,0,0,.25);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+h2 { margin: 0 0 .75rem; font-size: 1.05rem; }
+
+.filters { display: flex; flex-direction: column; gap: .75rem; }
+.field { display: flex; flex-direction: column; gap: .35rem; }
+label { color: #9ca3af; font-size: .85rem; }
+.req { color: #fca5a5; }
+
+input, select {
+  background: #0b1220;
+  border: 1px solid rgba(255,255,255,.08);
+  color: #e5e7eb;
+  padding: .6rem .75rem;
+  border-radius: .6rem;
+  outline: none;
+}
+
+.table-wrap { overflow: auto; border-radius: .85rem; border: 1px solid rgba(255,255,255,.06); }
+.table { width: 100%; border-collapse: collapse; min-width: 700px; }
+th, td { padding: .75rem 1rem; border-bottom: 1px solid rgba(255,255,255,.06); }
+th { text-align: left; color: #cbd5e1; font-weight: 600; user-select: none; }
+td { color: #e5e7eb; }
+.sortable { cursor: pointer; }
+
+.state { padding: .75rem; color: #9ca3af; }
+.state.error { color: #fca5a5; }
+
+.pager {
+  padding: .85rem 1rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.pager-actions { display: flex; gap: .5rem; align-items: center; }
+.size {
+  background: #0b1220;
+  border: 1px solid rgba(255,255,255,.08);
+  color: #e5e7eb;
+  padding: .45rem .6rem;
+  border-radius: .6rem;
+}
+
+.btn {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+  color: #e5e7eb;
+  padding: .5rem .75rem;
+  border-radius: .6rem;
+  cursor: pointer;
+
+  &:disabled { opacity: .5; cursor: not-allowed; }
+  &.primary { background: rgba(16,185,129,.18); border-color: rgba(16,185,129,.35); }
+}
