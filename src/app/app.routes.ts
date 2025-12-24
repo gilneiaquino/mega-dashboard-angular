@@ -32,8 +32,8 @@ export const routes: Routes = [
         path: 'relatorios',
         canActivate: [roleGuard(['ADMIN'])],
         loadComponent: () =>
-          import('./features/relatorios/relatorios.component')
-            .then(m => m.RelatoriosComponent)
+          import('./features/relatorios/pages/relatorios-list/relatorios-list.component')
+            .then(m => m.RelatoriosListComponent)
       },
 
       {

@@ -1,0 +1,79 @@
+<section class="page">
+  <header class="page-header">
+    <div>
+      <h1>Relatórios</h1>
+      <p class="sub">Crie e execute relatórios SQL do seu tenant.</p>
+    </div>
+
+    <button class="btn primary" (click)="criar()">+ Novo relatório</button>
+  </header>
+
+  <div class="filters">
+    <div class="field">
+      <label>Buscar</label>
+      <input type="text" [formControl]="q" placeholder="Nome ou descrição..." />
+    </div>
+
+    <div class="field">
+      <label>Tipo</label>
+      <select [formControl]="tipo">
+        <option value="">Todos</option>
+        <option value="TABELA">Tabela</option>
+        <option value="KPI">KPI</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card">
+    <div *ngIf="loading" class="state">Carregando...</div>
+    <div *ngIf="!loading && error" class="state error">{{ error }}</div>
+    <div *ngIf="!loading && !error && relatorios.length === 0" class="state">
+      Nenhum relatório encontrado.
+    </div>
+
+    <table *ngIf="!loading && !error && relatorios.length > 0" class="table">
+      <thead>
+      <tr>
+        <th (click)="ordenarPor('nome')" class="sortable">Nome</th>
+        <th>Descrição</th>
+        <th (click)="ordenarPor('tipo')" class="sortable">Tipo</th>
+        <th class="actions">Ações</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr *ngFor="let r of relatorios; trackBy: trackById">
+        <td class="strong">{{ r.nome }}</td>
+        <td class="muted">{{ r.descricao || '-' }}</td>
+        <td>
+          <span class="chip" [class.kpi]="r.tipo === 'KPI'">{{ r.tipo }}</span>
+        </td>
+        <td class="actions">
+          <button class="btn" (click)="executar(r)">Executar</button>
+          <button class="btn" (click)="editar(r)">Editar</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <footer class="pager" *ngIf="!loading && !error">
+      <span class="muted">
+        Página {{ page + 1 }} · Total {{ totalElements }}
+      </span>
+
+      <div class="pager-actions">
+        <button class="btn" (click)="anterior()" [disabled]="page === 0">Anterior</button>
+        <button class="btn" (click)="proximo()"
+                [disabled]="(page + 1) * size >= totalElements">
+          Próximo
+        </button>
+
+        <select class="size" [value]="size" (change)="size = +($any($event.target).value); page = 0; carregar()">
+          <option [value]="10">10</option>
+          <option [value]="20">20</option>
+          <option [value]="50">50</option>
+        </select>
+      </div>
+    </footer>
+  </div>
+</section>
