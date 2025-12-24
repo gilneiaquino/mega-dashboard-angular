@@ -1,4 +1,5 @@
-import {BarItem, PieItem} from '../services/dashboard.service';
+import {BarItem} from '../../../core/model/bar-item';
+import {PieItem} from '../../../core/model/pieI-item';
 
 export interface DashboardResponse {
   carteiraFisica: PieItem[];

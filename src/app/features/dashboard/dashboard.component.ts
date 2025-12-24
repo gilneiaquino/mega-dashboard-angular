@@ -1,18 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
+import {Component, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
 
-import { DashboardFiltroComponent as DashboardFiltroComponent } from './filtro/dashboardFiltroComponent';
- import { DashboardService } from './services/dashboard.service';
+import {DashboardFiltroComponent} from './filtro/dashboardFiltroComponent';
+import {DashboardService} from './services/dashboard.service';
 import {DashboardResponse} from './model/dashboard-response';
 import {DashboardFiltro} from './model/dashboard-filtro';
-import { DashboardCardComponent } from './shared/dashboard-card.component';
-import { AppHeaderComponent } from '../../shared/components/header/app-header.component';
+import {DashboardCardComponent} from './shared/dashboard-card.component';
+import {AppHeaderComponent} from '../../shared/components/header/app-header.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule,AppHeaderComponent, NgxChartsModule, DashboardFiltroComponent, DashboardCardComponent],
+  imports: [
+    CommonModule,
+    AppHeaderComponent,
+    NgxChartsModule,
+    DashboardFiltroComponent,
+    DashboardCardComponent
+  ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
@@ -24,28 +30,20 @@ export class DashboardComponent implements OnInit {
   loading = false;
   erro: string | null = null;
 
-  // exemplo de dados para ngx-charts
+  // tamanho dos gráficos
   view: [number, number] = [600, 300];
 
-  // gráfico de pizza – situação da carteira
-  dadosCarteira: { name: string; value: number }[] = [];
-
-  // gráfico de barras – operações por estágio
-  dadosOperacoes: { name: string; value: number }[] = [];
-  // para os gráficos de pizza
+  // dados (ngx-charts)
   dadosCarteiraFisica: { name: string; value: number }[] = [];
   dadosCarteiraFinanceira: { name: string; value: number }[] = [];
-
-// para o gráfico de barras com séries
   dadosEvolucao: { name: string; series: { name: string; value: number }[] }[] = [];
 
-
-  constructor(private dashboardService: DashboardService) {}
+  constructor(private dashboardService: DashboardService) {
+  }
 
   ngOnInit(): void {
-    // se quiser já carregar algo padrão, tipo filtro com data atual, setar aqui
-    // this.filtroAtual = { ... };
-    // if (this.filtroAtual) this.carregarDashboard(this.filtroAtual);
+    // Se quiser carregar algo default (exemplo):
+    // this.onPesquisar({ dataInicio: '2025-01-01', dataFim: '2025-01-31', status: 'TODOS' });
   }
 
   onPesquisar(filtro: DashboardFiltro | null): void {
@@ -57,35 +55,52 @@ export class DashboardComponent implements OnInit {
     this.loading = true;
     this.erro = null;
 
-    this.dashboardService.consultar(filtro).subscribe({
+    // zera antes pra UI reagir (opcional)
+    this.dadosCarteiraFisica = [];
+    this.dadosCarteiraFinanceira = [];
+    this.dadosEvolucao = [];
+
+    // ✅ IMPORTANTE:
+    // Você precisa ter no service um método "consultarResumo"
+    // que chame /api/dashboards/resumo (ou o endpoint real de gráficos)
+    this.dashboardService.consultarResumo(filtro).subscribe({
       next: (res: DashboardResponse) => {
-
-        // Pie – carteira física
-        this.dadosCarteiraFisica = (res.carteiraFisica || []).map(item => ({
+        // Sempre criar novos arrays (ngx-charts é sensível a referência)
+        this.dadosCarteiraFisica = (res?.carteiraFisica ?? []).map(item => ({
           name: item.label,
           value: item.value
-        }));
+        })).slice();
 
-        // Pie – carteira financeira
-        this.dadosCarteiraFinanceira = (res.carteiraFinanceira || []).map(item => ({
+        this.dadosCarteiraFinanceira = (res?.carteiraFinanceira ?? []).map(item => ({
           name: item.label,
           value: item.value
-        }));
+        })).slice();
 
-        // Bar – evolução (com séries)
-        this.dadosEvolucao = (res.evolucao || []).map(bar => ({
+        this.dadosEvolucao = (res?.evolucao ?? []).map(bar => ({
           name: bar.label,
-          series: (bar.series || []).map(serie => ({
+          series: (bar.series ?? []).map(serie => ({
             name: serie.label,
             value: serie.value
           }))
-        }));
+        })).slice();
+
+        // debug rápido (remova depois)
+        // console.log('fisica', this.dadosCarteiraFisica);
+        // console.log('financeira', this.dadosCarteiraFinanceira);
+        // console.log('evolucao', this.dadosEvolucao);
 
         this.loading = false;
       },
       error: (err) => {
         console.error('Erro ao carregar dashboard', err);
-        this.erro = 'Erro ao carregar dados do dashboard.';
+
+        // aqui fica bem claro o problema atual:
+        // seu backend está devolvendo Page em /api/dashboards
+        // e a tela precisa do endpoint /resumo para os gráficos
+        this.erro =
+          'Não foi possível carregar os gráficos. ' +
+          'Verifique se o backend expõe /api/dashboards/resumo retornando DashboardResponse.';
+
         this.dadosCarteiraFisica = [];
         this.dadosCarteiraFinanceira = [];
         this.dadosEvolucao = [];
