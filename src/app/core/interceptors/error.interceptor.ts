@@ -11,12 +11,17 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     catchError((err: unknown) => {
       if (err instanceof HttpErrorResponse) {
-        if (err.status === 401 || err.status === 403) {
+        if (err.status === 401) {
           auth.logout();
-
-          // evita loop se já estiver no login
           if (!router.url.startsWith('/login')) {
             router.navigate(['/login'], { queryParams: { returnUrl: router.url } });
+          }
+        }
+
+        if (err.status === 403) {
+          // mantém logado e só manda pra acesso negado
+          if (!router.url.startsWith('/forbidden')) {
+            router.navigate(['/forbidden']);
           }
         }
       }
